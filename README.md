@@ -2,7 +2,7 @@
 
 Póster del proyecto integrador de **Saul Ibrahim Garcia Ochoa**, Centro Universitario de Guadalajara (CUGDL).
 
-- **Póster (90 × 120 cm):** [`poster.pdf`](poster.pdf)
+- **Póster (90 × 120 cm):** [`poster.pdf`](poster.pdf), y con 3 mm de sangrado para imprenta: [`poster_sangrado.pdf`](poster_sangrado.pdf)
 - **Vista previa:** [`vista_previa.png`](vista_previa.png)
 
 ![Vista previa del póster](vista_previa.png)
@@ -13,7 +13,7 @@ Póster del proyecto integrador de **Saul Ibrahim Garcia Ochoa**, Centro Univers
 El caso de aplicación es una cadena de restaurantes de **33 sucursales en 10 regiones**. Se presenta de forma anónima. El código de étoile es privado.
 
 ## El problema
-Una cadena recibe miles de reseñas y casi todas son elogios. En el caso de estudio, **11 de cada 100** reseñas con texto son quejas. Leer las más de 7,300 reseñas a mano tomaría unas 20 horas, y leer solo las quejas, unas 2 (estimado a 10 segundos por reseña).
+Una cadena recibe miles de reseñas y casi todas son elogios. En el caso de estudio, **11 de cada 100** reseñas con texto son quejas. Antes las reseñas nuevas se descargaban cada 15 días; hoy llegan en una mediana de unas 3 horas (la meta de la sincronización es de 30 minutos, que todavía no se cumple en la práctica).
 
 **Objetivos**
 1. Cargar las reseñas sin duplicados.
@@ -39,15 +39,19 @@ F1 en las 91 reseñas de prueba, antes y después de corregir las reglas:
 | Calidad | 57 % | 56 % | 32–73 % |
 | Valor (precio) | 75 % | **92 %** | 67–100 % |
 
-- **Calidad no mejoró.** Las palabras como «plato» o «comida» aparecen tanto en elogios como en quejas. Es la tarea pendiente.
+- **Calidad no mejoró.** Al marcar una queja de calidad acierta más (precisión de 44 a 53 %), pero detecta menos quejas reales (exhaustividad de 82 a 59 %). Falta analizar por qué; es la tarea pendiente.
 - **Hora.** A las 21 h, 1 de cada 5 reseñas es queja; el promedio es 1 de cada 9.
-- **Día.** Los sábados a las 21 h, 1 de cada 3 reseñas es queja.
+- **Día.** Los sábados a las 21 h, 1 de cada 3 reseñas es queja (27 de 82). Es una sola celda del mapa de calor: el margen es amplio.
 - **Cambio en el tiempo.** Hace dos años la proporción de quejas era mucho mayor que hoy, por eso se prueba con reseñas posteriores.
+
+## Historia
+- **Mayo 2026:** primer tablero. **Junio:** descarga automática de reseñas, cada 15 días. **Agosto:** ranking justo (brillo ajustado). **9 de octubre:** API oficial de Google. **20 de octubre:** producto para cualquier cadena. **9 de noviembre:** versión 2.2.
 
 ## Limitaciones
 - Las etiquetas las hizo **una sola persona-IA**; no hay acuerdo entre etiquetadores (kappa).
 - Las muestras son pequeñas: el margen de error es de ±20 puntos en varias cifras.
-- La hora de una reseña es la de su publicación, no la de la visita.
+- La hora de una reseña es la de su publicación, no la de la visita; se calcula en la zona horaria de cada región.
+- En el póster, el ejemplo de reseña es un fragmento editado de una real, y las tiendas A y B del brillo ajustado son imaginarias.
 - Es un conjunto de reglas evaluado, no un modelo entrenado. El siguiente paso propuesto es una regresión logística con TF-IDF, comparada contra las reglas.
 
 ## Referencias
