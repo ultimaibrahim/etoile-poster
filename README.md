@@ -1,4 +1,4 @@
-# étoile: de miles de reseñas de Google a alertas claras
+# Un número no alcanza: étoile convierte miles de reseñas en una historia clara por tienda
 
 Póster del proyecto integrador de **Saul Ibrahim Garcia Ochoa**, Centro Universitario de Guadalajara (CUGDL).
 
@@ -8,53 +8,57 @@ Póster del proyecto integrador de **Saul Ibrahim Garcia Ochoa**, Centro Univers
 ![Vista previa del póster](vista_previa.png)
 
 ## Qué es étoile
-*étoile* quiere decir «estrella» en francés. Es un tablero que lee las reseñas de Google Maps de cada sucursal de una cadena de restaurantes y avisa **qué falla, dónde y a qué hora**. Cada sucursal es una estrella, cada región una constelación, y la estrella brilla más cuanto mejor la califican sus clientes.
+*étoile* quiere decir «estrella» en francés. Es un tablero que lee las reseñas de Google Maps de cada sucursal de una cadena y cuenta qué se critica, qué se elogia y cuándo. Cada sucursal es una estrella, cada región una constelación, y la estrella brilla más cuanto mejor la califican sus clientes.
 
 El caso de aplicación es una cadena de restaurantes de **33 sucursales en 10 regiones**. Se presenta de forma anónima. El código de étoile es privado.
 
-## El problema
-Una cadena recibe miles de reseñas y casi todas son elogios. En el caso de estudio, **11 de cada 100** reseñas con texto son quejas. Antes las reseñas nuevas se descargaban cada 15 días; hoy llegan en una mediana de unas 3 horas (la meta de la sincronización es de 30 minutos, que todavía no se cumple en la práctica).
+## Antes: un número y un color
+En la cadena del caso, el gerente veía la calificación de Google y las reseñas más recientes. Marketing recibía un Excel de mapa de calor, de rojo a verde: un número y un color por semana. No decía por qué subía o bajaba, ni qué se criticaba o se elogiaba, ni cuántas reseñas había detrás. Las reseñas nuevas se descargaban cada 15 días; hoy llegan en una mediana de unas 3 horas.
 
 **Objetivos**
-1. Cargar las reseñas sin duplicados.
-2. Medir cuánto se equivoca el programa que etiqueta las quejas.
-3. Comparar tiendas con pocas y muchas reseñas de forma justa.
-4. Ver a qué hora y qué día se quejan más, y que cada rol vea solo lo suyo.
+1. Contar qué dicen las reseñas de cada tienda, no solo cuántas.
+2. Ubicar cuándo se concentran las quejas en la semana.
+3. Averiguar si a otras cadenas les sirve.
+
+## Por qué un solo número no alcanza
+| Dato | Fuente | Alcance |
+|---|---|---|
+| El 74 % solo mira reseñas de los últimos 3 meses; el 47 % no usaría un negocio con menos de 20 reseñas; el 89 % espera que el dueño responda | [BrightLocal (2026)](https://www.brightlocal.com/research/local-consumer-review-survey/) | Encuesta a consumidores de EE. UU. |
+| El número de reseñas y las valoraciones positivas influyen en el posicionamiento local | [Ayuda de Google](https://support.google.com/business/answer/7091) | Documentación de Google; no da pesos ni umbrales |
+| Calificación, cantidad, recencia y flujo constante de reseñas puntúan alto para el mapa de Google | [Whitespark (2026)](https://whitespark.ca/local-search-ranking-factors/) | Encuesta a 47 expertos en SEO local: opinión, no medición del algoritmo |
+
+**Cautela.** Es evidencia de EE. UU. Un estudio de 2011 sobre Yelp ([Luca, 2011](https://econpapers.repec.org/RePEc:hbs:wpaper:12-016)) halló más ingresos por estrella en restaurantes independientes y un efecto casi nulo en cadenas. No sabemos si hoy se cumple, ni en México. No encontramos datos públicos mexicanos sobre cómo las cadenas usan las reseñas.
 
 ## Metodología
-1. **Reunir.** Más de 7,300 reseñas con texto (primero con un servicio de descarga automática y luego con la API oficial de Google). Variables: estrellas, texto, fecha, hora y sucursal.
-2. **Limpiar.** Se quitan duplicados y las reseñas de 1–2★ sin texto.
-3. **Clasificar.** Un programa de reglas explicables lee el texto: palabras clave por tema, una ventana que detecta negaciones y reglas de contexto. Marca si la reseña es queja y si trata de servicio, calidad o precio.
-4. **Medir.** Se etiquetaron **183 reseñas a ciegas** (antes de ver la salida del programa): 92 para ajustar las reglas y 91 para probarlas. Se reporta **F1** (nota de 0 a 100 % de acierto) con intervalos al 95 % por *bootstrap*. Las reseñas de prueba son posteriores a las de ajuste, porque los clientes cambian con el tiempo.
-5. **Mostrar.** Un tablero web con alertas. Una base de datos Postgres impone los permisos por rol.
-
-**Brillo ajustado.** Para comparar tiendas con distinto número de reseñas se usa un promedio que mezcla el de la tienda con el de su región: `(n · promedio + 10 · C) / (n + 10)`, donde `n` es el número de reseñas y `C` el promedio regional. Una tienda con 3 reseñas de 5★ no le gana a una con 300 reseñas de 4.8★.
+- **Variables:** estrellas, texto, fecha, hora local y sucursal.
+- **Muestra:** 7,310 reseñas con texto de 33 sucursales y 10 regiones (al corte del póster).
+- **Queja:** reseña de 1 o 2 estrellas con texto.
+- **Hora:** cada reseña se cuenta en la zona horaria de su región.
+- **Equipo:** Postgres (Supabase), JavaScript y ECharts.
+- **Análisis:** proporciones de quejas por hora y por día de la semana.
+- **Temas:** las etiquetas de tema (servicio, calidad, precio) salen de reglas de palabras en español, no de IA. Su exactitud aún no se mide de forma continua.
+- **Brillo ajustado:** para comparar tiendas con distinto número de reseñas se mezcla el promedio de la tienda con el de su región: `(n · promedio + 10 · C) / (n + 10)`, donde `n` es el número de reseñas y `C` el promedio regional. Una tienda con 3 reseñas de 5★ no le gana a una con 300 reseñas de 4.8★. En el póster, las tiendas A y B son imaginarias.
 
 ## Resultados
-F1 en las 91 reseñas de prueba, antes y después de corregir las reglas:
+- **11 de cada 100** reseñas con texto son quejas (832 de 7,310).
+- **Hora:** a las 21 h, 1 de cada 5 reseñas es queja; el promedio es 1 de cada 9.
+- **Día:** los sábados a las 21 h, 1 de cada 3 reseñas es queja (27 de 82). Es una sola celda del mapa de calor y la muestra es pequeña; las celdas con menos de 25 reseñas se dejan vacías.
+- **Frescura:** las reseñas nuevas llegan en una mediana de unas 3 horas. Antes, cada 15 días.
 
-| Tema | Antes | Después | Intervalo al 95 % (después) |
-|---|---|---|---|
-| Servicio | 69 % | **89 %** | 80–96 % |
-| Calidad | 57 % | 56 % | 32–73 % |
-| Valor (precio) | 75 % | **92 %** | 67–100 % |
-
-- **Calidad no mejoró.** Al marcar una queja de calidad acierta más (precisión de 44 a 53 %), pero detecta menos quejas reales (exhaustividad de 82 a 59 %). Falta analizar por qué; es la tarea pendiente.
-- **Hora.** A las 21 h, 1 de cada 5 reseñas es queja; el promedio es 1 de cada 9.
-- **Día.** Los sábados a las 21 h, 1 de cada 3 reseñas es queja (27 de 82). Es una sola celda del mapa de calor: el margen es amplio.
-- **Cambio en el tiempo.** Hace dos años la proporción de quejas era mucho mayor que hoy, por eso se prueba con reseñas posteriores.
-
-## Historia
-- **Mayo 2026:** primer tablero. **Junio:** descarga automática de reseñas, cada 15 días. **Agosto:** ranking justo (brillo ajustado). **9 de octubre:** API oficial de Google. **20 de octubre:** producto para cualquier cadena. **9 de noviembre:** versión 2.2.
+## Lo que sabemos y lo que no
+- Un número no alcanza: Google y los consumidores miran cantidad, recencia y respuesta (evidencia de EE. UU.).
+- étoile separa las quejas y muestra cuándo se concentran.
+- **No sabemos** cómo usan las reseñas las cadenas mexicanas. No hay datos públicos.
+- **Siguiente paso:** probar étoile con otras cadenas y preguntarles.
 
 ## Limitaciones
-- Las etiquetas las hizo **una sola persona-IA**; no hay acuerdo entre etiquetadores (kappa).
-- Las muestras son pequeñas: el margen de error es de ±20 puntos en varias cifras.
-- La hora de una reseña es la de su publicación, no la de la visita; se calcula en la zona horaria de cada región.
-- En el póster, el ejemplo de reseña es un fragmento editado de una real, y las tiendas A y B del brillo ajustado son imaginarias.
-- Es un conjunto de reglas evaluado, no un modelo entrenado. El siguiente paso propuesto es una regresión logística con TF-IDF, comparada contra las reglas.
+- Es un caso, una sola cadena.
+- La hora de una reseña es la de su publicación, no la de la visita.
+- Las cifras de los estudios externos no son de México.
+- Las etiquetas de tema son reglas y su exactitud no se mide de forma continua.
 
 ## Referencias
-- Efron, B., & Tibshirani, R. J. (1993). *An introduction to the bootstrap*. Chapman & Hall.
-- Fellegi, I. P., & Sunter, A. B. (1969). A theory for record linkage. *Journal of the American Statistical Association, 64*(328), 1183–1210. https://doi.org/10.1080/01621459.1969.10501049
-- Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., & Rubin, D. B. (2013). *Bayesian data analysis* (3.ª ed.). CRC Press.
+- BrightLocal. (2026, 11 de febrero). *Local consumer review survey 2026*. https://www.brightlocal.com/research/local-consumer-review-survey/
+- Google. (s. f.). *Consejos para mejorar el posicionamiento local en Google*. Ayuda de Perfil de Empresa. https://support.google.com/business/answer/7091
+- Luca, M. (2011). *Reviews, reputation, and revenue: The case of Yelp.com* (Working Paper 12-016). Harvard Business School.
+- Whitespark. (2025, 6 de noviembre). *Local search ranking factors 2026*. https://whitespark.ca/local-search-ranking-factors/
