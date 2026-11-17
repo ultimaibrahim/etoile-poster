@@ -50,6 +50,7 @@ En [`analitica/`](analitica/) están los scripts de Python que limpian las rese�
 - **Limpieza** ([`01_limpieza.py`](analitica/01_limpieza.py)): validación, hora local, normalización de texto, idioma, duplicados, anonimización. Embudo en [`reporte_limpieza.md`](analitica/resultados/reporte_limpieza.md).
 - **Clasificador supervisado** ([`02_modelo.py`](analitica/02_modelo.py)): ¿la reseña es negativa (1–2★) por su texto? TF-IDF con Naive Bayes y regresión logística (F1 ≈ 0.91) contra las reglas de palabras de étoile (F1 ≈ 0.76). Ver [`reporte_modelo.md`](analitica/resultados/reporte_modelo.md).
 - **¿De qué se queja?** ([`04_evaluacion_categorias.py`](analitica/04_evaluacion_categorias.py)): las reglas de temas de étoile contra 183 reseñas etiquetadas, con intervalos de confianza. Servicio F1 ≈ 0.86, calidad ≈ 0.59. Ver [`reporte_categorias.md`](analitica/resultados/reporte_categorias.md).
+- **Peso del ranking** ([`05_estimar_m.py`](analitica/05_estimar_m.py)): la m del Brillo ajustado no se elige; se despeja del modelo bayesiano (m = σ²/τ²) y se estima con los datos: m ≈ 4.1 (IC 95 % 3.3–12.6). Ver [`reporte_m.md`](analitica/resultados/reporte_m.md).
 - **Agrupamiento** ([`03_clusters.py`](analitica/03_clusters.py)): K-means sobre el perfil reciente de las sucursales: separa 6 de 33 con más quejas (exploratorio). Ver [`reporte_clusters.md`](analitica/resultados/reporte_clusters.md).
 
 ## Lo que sabemos y lo que no

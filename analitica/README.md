@@ -11,6 +11,7 @@ datos reales y responden dos preguntas con aprendizaje automático. Los datos (`
 | 2 | `02_modelo.py` | **Supervisado:** ¿reseña negativa (≤2★) por su texto? Léxico de Étoile vs. Naive Bayes vs. regresión logística (TF-IDF) | `resultados/reporte_modelo.md`, `figuras/02_*.png` |
 | 3 | `03_clusters.py` | **No supervisado:** K-means sobre el perfil de las sucursales en los últimos 12 meses (5 variables), k por silueta, PCA para graficar | `resultados/reporte_clusters.md`, `figuras/03_*.png` |
 | 4 | `04_evaluacion_categorias.py` | **Evaluación con etiquetas:** ¿acierta étoile de qué se queja el cliente (servicio, calidad, precio)? F1 con IC 95 % por bootstrap | `resultados/reporte_categorias.md`, `figuras/04_*.png` |
+| 5 | `05_estimar_m.py` | **Estadística:** la m del Brillo ajustado se despeja (m = σ²/τ², modelo normal–normal) y se estima por Bühlmann–Straub con IC por bootstrap | `resultados/reporte_m.md`, `figuras/05_*.png` |
 
 ```bash
 cd analitica
@@ -20,6 +21,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python 02_modelo.py
 .venv/bin/python 03_clusters.py
 .venv/bin/python 04_evaluacion_categorias.py   # necesita datos/etiquetas_categorias.csv (privado)
+.venv/bin/python 05_estimar_m.py
 ```
 
 `lexico_etoile.py` es el clasificador por reglas de étoile portado a Python; da **exactamente** lo mismo que el
