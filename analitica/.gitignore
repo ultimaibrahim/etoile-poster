@@ -2,3 +2,4 @@
 __pycache__/
 datos/
 *.csv
+lexico_etoile.py

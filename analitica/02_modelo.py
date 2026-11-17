@@ -16,7 +16,6 @@ Modelos comparados (mismo conjunto de prueba):
 Entrada:  datos/resenas_limpias.csv
 Salida:   resultados/reporte_modelo.md, figuras/*.png, datos/errores_modelo.csv
 """
-import re
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -38,12 +37,7 @@ plt.rcParams.update({"font.size": 11, "axes.spines.top": False, "axes.spines.rig
                      "axes.edgecolor": GRIS, "axes.labelcolor": NOCHE, "text.color": NOCHE,
                      "figure.dpi": 140, "savefig.bbox": "tight"})
 
-# Señal de inconformidad de classifyLocally (copiada del JS; el texto ya viene sin acentos y en minúsculas).
-NEG = re.compile(
-    r"\b(mal\w*|pesim\w*|horribl\w*|horrend\w*|asco|asquer\w*|fe[oa]s?|nefast\w*|terribl\w*|peor\w*|groser\w*|despot\w*|apatic\w*|deficien\w*|lent[oa]s?|tard\w*|demor\w*|espera\w*|esperar|nunca|jamas|falt\w*|olvid\w*|equivocad\w*|incomplet\w*|crud[oa]s?|fri[oa]s?|quemad\w*|ranci\w*|insipid\w*|aguad\w*|escas\w*|poc[oa]s?|pobre\w*|decepci\w*|empalag\w*|irrisori\w*|miseri\w*|echad\w*|suci[oa]s?|caro|caros|carisim\w*|estafa|abusiv\w*|robo|elevad\w*|alt[oa]s|disgust\w*|niega\w*|negaron|nego|ignor\w*|desanimo|hostil\w*|cancel\w*|rebajad\w*|diferente|disminuy\w*|reduc\w*|neutro|llorar|queja\w*|exagerad\w*|embarrad\w*|barrada)\b"
-    r"|\bno (me|nos|te|le|lo|la|los|las|tienen|tenian|tenia|hay|dieron|atend\w*|vale\w*|sirv\w*|ponen|ponian|respet\w*|pusieron)\b"
-    r"|\bsin (queso|salsa|sabor|champi\w*|fresas?|cambio|educacion)\b|que desear|a disgusto|bola de|sabia a|saben a|sabe a"
-)
+from lexico_etoile import NEG  # señal de inconformidad de classifyLocally (paridad verificada con el JS)
 
 
 class Lexico:
