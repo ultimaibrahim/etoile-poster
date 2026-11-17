@@ -20,6 +20,7 @@ import pandas as pd
 AQUI = Path(__file__).resolve().parent
 ZONA = "America/Mexico_City"
 ANONIMIZAR = True
+ZONA_POR_REGION = {"CUN": "America/Cancun", "TJ": "America/Tijuana"}
 SEMILLA_ANON = 2026
 BITACORA: list[tuple[str, str, int]] = []
 
@@ -117,8 +118,6 @@ def main() -> None:
     # 5. Variables derivadas (ingeniería de características)
     df["anio"] = df["published_at"].dt.year
     df["mes"] = df["published_at"].dt.strftime("%Y-%m")
-    df["hora"] = df["published_at"].dt.hour
-    df["dia_semana"] = df["published_at"].dt.day_of_week
     df["editada"] = df["updated_at"] > df["published_at"]
     anota("Reseñas editadas por el cliente", "la calificación vigente es la última", df["editada"].sum())
     df["respondida"] = df["reply_text"].notna()
@@ -146,6 +145,17 @@ def main() -> None:
     # 7. Enriquecer con la región (3FN en la base: la región vive en locations)
     df = df.merge(tiendas[["id", "nombre", "region"]].rename(columns={"id": "location_id", "nombre": "tienda"}),
                   on="location_id", how="left")
+
+    # Hora y día en la zona de cada sucursal (como en la app): dos regiones tienen huso propio.
+    utc = pd.to_datetime(df["published_at"].astype(str), utc=True, format="ISO8601")
+    df["hora"], df["dia_semana"] = 0, 0
+    for reg in df["region"].unique():
+        m = df["region"] == reg
+        local = utc[m].dt.tz_convert(ZONA_POR_REGION.get(reg, ZONA))
+        df.loc[m, "hora"] = local.dt.hour.to_numpy()
+        df.loc[m, "dia_semana"] = local.dt.day_of_week.to_numpy()
+    fuera_centro = df["region"].isin(list(ZONA_POR_REGION))
+    anota("Reseñas con hora en zona distinta a la del centro", "dos regiones con huso propio", fuera_centro.sum())
 
     # 8. Anonimización: la cadena se presenta de forma anónima en lo académico.
     #    Sucursales → «S01…» y regiones → «Región A…», con orden aleatorio fijo (semilla).

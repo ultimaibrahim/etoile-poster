@@ -15,7 +15,7 @@ Se comparan:
   2. Clasificación guardada en la base (lo que ve el usuario): mezcla de Gemini y del léxico.
 Intervalos de confianza al 95 % por bootstrap (2,000 remuestreos, semilla fija).
 
-Entrada:  datos/etiquetas_categorias.csv (privado), datos/resenas_limpias.csv
+Entrada:  datos/etiquetas_categorias.csv (privado), datos/resenas_limpias.csv, datos/crudo_resenas.csv
 Salida:   resultados/reporte_categorias.md, figuras/04_f1_categorias.png
 """
 from pathlib import Path
@@ -50,8 +50,10 @@ def f1_ic(y, p, rng):
 
 def main() -> None:
     et = pd.read_csv(AQUI / "datos/etiquetas_categorias.csv")
-    df = pd.read_csv(AQUI / "datos/resenas_limpias.csv", usecols=["id", "text", "stars", "clf_servicio", "clf_calidad", "clf_valor"])
-    m = et.merge(df.drop(columns="stars"), on="id", how="left")
+    df = pd.read_csv(AQUI / "datos/resenas_limpias.csv", usecols=["id", "clf_servicio", "clf_calidad", "clf_valor"])
+    # El léxico se evalúa con el texto CRUDO, como en producción: usa los saltos de línea para cortar frases.
+    crudo = pd.read_csv(AQUI / "datos/crudo_resenas.csv", usecols=["id", "text"])
+    m = et.merge(df, on="id", how="left").merge(crudo, on="id", how="left")
     perdidas = m["text"].isna().sum()
     m = m.dropna(subset=["text"])
     print(f"Muestra: {len(et)} · encontradas en la base: {len(m)} (dev {sum(m.split == 'dev')}, test {sum(m.split == 'test')})")

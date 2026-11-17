@@ -9,7 +9,7 @@ datos reales y responden dos preguntas con aprendizaje automático. Los datos (`
 | 0 | `00_exportar.py` | Descarga reseñas y tiendas por la API REST, **sin datos personales** | `datos/crudo_*.csv` |
 | 1 | `01_limpieza.py` | Validación, fechas a hora local, normalización de texto, idioma, **anonimización de sucursales y regiones**, banderas de calidad, variables derivadas, aplanado del JSONB | `datos/resenas_limpias.csv`, `resultados/reporte_limpieza.md` |
 | 2 | `02_modelo.py` | **Supervisado:** ¿reseña negativa (≤2★) por su texto? Léxico de Étoile vs. Naive Bayes vs. regresión logística (TF-IDF) | `resultados/reporte_modelo.md`, `figuras/02_*.png` |
-| 3 | `03_clusters.py` | **No supervisado:** K-means sobre el perfil de las sucursales, k por silueta, PCA para graficar | `resultados/reporte_clusters.md`, `figuras/03_*.png` |
+| 3 | `03_clusters.py` | **No supervisado:** K-means sobre el perfil de las sucursales en los últimos 12 meses (5 variables), k por silueta, PCA para graficar | `resultados/reporte_clusters.md`, `figuras/03_*.png` |
 | 4 | `04_evaluacion_categorias.py` | **Evaluación con etiquetas:** ¿acierta étoile de qué se queja el cliente (servicio, calidad, precio)? F1 con IC 95 % por bootstrap | `resultados/reporte_categorias.md`, `figuras/04_*.png` |
 
 ```bash

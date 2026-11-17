@@ -16,6 +16,7 @@ Generado por `01_limpieza.py`. Rango: 2013-09-07 → 2026-11-17.
 | Texto largo repetido en la misma tienda | posible duplicado o spam; bandera texto_repetido | 62 |
 | Reseñas editadas por el cliente | la calificación vigente es la última | 1,098 |
 | Reseñas con texto sin clasificación guardada | backlog pendiente del clasificador | 3,099 |
+| Reseñas con hora en zona distinta a la del centro | dos regiones con huso propio | 597 |
 | Sucursales y regiones anonimizadas | la cadena se presenta de forma anónima | 33 |
 | Filas en el dataset limpio | una por reseña | 11,148 |
 

@@ -9,7 +9,7 @@
 
 | Categoría | Método | n | Precisión | Recall | F1 | IC 95 % | VP/FP/FN |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Servicio / espera | Léxico v2 | 91 | 0.89 | 0.84 | **0.86** | 0.77–0.94 | 32/4/6 |
+| Servicio / espera | Léxico v2 | 91 | 0.91 | 0.84 | **0.88** | 0.78–0.95 | 32/3/6 |
 | Servicio / espera | Guardada en la base | 73 | 0.78 | 0.71 | **0.75** | 0.62–0.85 | 25/7/10 |
 | Calidad del producto | Léxico v2 | 91 | 0.55 | 0.65 | **0.59** | 0.38–0.77 | 11/9/6 |
 | Calidad del producto | Guardada en la base | 73 | 0.45 | 0.87 | **0.59** | 0.39–0.75 | 13/16/2 |

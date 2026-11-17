@@ -1,39 +1,43 @@
 # Reporte de clustering · K-means sobre sucursales
 
-- 32 sucursales con ≥ 50 reseñas; 1 excluidas por poco volumen (S32).
-- 7 variables estandarizadas (z-score). Nulos imputados con la mediana: 1.
-- k elegido por silueta máxima: **k = 3** (silueta 0.225). Silueta < 0.25 indica estructura débil; < 0.5, moderada.
-- PCA: los dos primeros componentes explican 60% de la varianza (solo para graficar).
+- Ventana: 2025-11-17 → 2026-11-17 (últimos 12 meses).
+- 33 sucursales con ≥ 15 reseñas en la ventana; 0 excluidas.
+- 5 variables estandarizadas (z-score): Volumen (log10 de reseñas), Calificación media, % de quejas (1–2★ con texto), % sin texto, % publicadas desde las 20:00.
+- k-means++ con 30 inicios por k y semilla 42. k elegido por silueta máxima: **k = 2**.
 
-## Perfil promedio de cada grupo (ordenados de mejor a peor media)
+| k | Silueta | Inercia |
+|---:|---:|---:|
+| 2 | 0.397 | 106 |
+| 3 | 0.220 | 82 |
+| 4 | 0.201 | 70 |
+| 5 | 0.231 | 58 |
+| 6 | 0.293 | 48 |
 
-| Grupo | Sucursales | Reseñas | Media ★ | % neg. | % texto | % q. servicio | % q. calidad | Tendencia |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 16 | 218 | 4.58 | 9.2 | 76 | 75 | 58 | +0.89 |
-| 2 | 11 | 650 | 4.54 | 7.9 | 61 | 81 | 47 | +0.98 |
-| 3 | 5 | 95 | 4.20 | 19.1 | 81 | 79 | 50 | +0.86 |
+## Perfil promedio de cada grupo
+
+| Grupo | Sucursales | Reseñas | Media ★ | % quejas | % sin texto | % desde 20:00 |
+|---|---:|---:|---:|---:|---:|---:|
+| 1 | 27 | 246 | 4.80 | 3.7 | 26 | 22 |
+| 2 | 6 | 64 | 4.17 | 17.0 | 13 | 17 |
 
 ## Integrantes
 
-- **Grupo 1:** S31, S09, S10, S12, S15, S27, S24, S26, S28, S11, S21, S16, S19, S29, S13, S06
-- **Grupo 2:** S17, S14, S03, S22, S05, S04, S07, S30, S23, S33, S01
-- **Grupo 3:** S20, S18, S02, S08, S25
+- **Grupo 1:** S29, S09, S31, S17, S26, S14, S07, S04, S19, S16, S30, S11, S10, S05, S27, S06, S22, S20, S23, S28, S13, S15, S21, S33, S03, S24, S08
+- **Grupo 2:** S12, S02, S01, S25, S18, S32
 
-## Cargas del PCA
+## Cargas del PCA (solo para graficar)
 
 | Variable | C1 | C2 |
 |---|---:|---:|
-| Volumen (log de reseñas) | -0.50 | -0.20 |
-| Calificación media | -0.52 | +0.32 |
-| % negativas (≤2★) | +0.60 | -0.18 |
-| % con texto | +0.31 | +0.35 |
-| % de quejas por servicio | -0.07 | -0.53 |
-| % de quejas por calidad | +0.04 | +0.65 |
-| Media últimos 12 meses − media previa | -0.12 | -0.02 |
+| Volumen (log10 de reseñas) | -0.47 | -0.08 |
+| Calificación media | -0.56 | +0.06 |
+| % de quejas (1–2★ con texto) | +0.57 | -0.07 |
+| % sin texto | -0.33 | -0.58 |
+| % publicadas desde las 20:00 | -0.19 | +0.80 |
 
 ## Advertencias
 
-- K-means aquí es **exploratorio**: con ~30 puntos no hay «verdad» contra la cual validar.
-- `% de quejas por servicio/calidad` viene de la clasificación guardada, que mezcla Gemini y el léxico local, y se contrae hacia la media global con m = 10 (igual que el Brillo) porque varias tiendas tienen < 10 quejas.
-- 2026 concentra más de la mitad de las reseñas con media muy alta (probable campaña de solicitud): la `tendencia` refleja eso en todas las tiendas.
-- Los grupos dependen de las variables elegidas; otra selección daría otros grupos.
+- Exploratorio: con ~30 puntos no hay etiquetas contra las cuales validar los grupos.
+- Las sucursales del grupo de menor media tienen pocas reseñas en la ventana: su señal es menos firme.
+- Con k ≥ 3 la silueta cae bajo 0.25: lo defendible es una sola separación.
+- Otra selección de variables o de ventana daría otros grupos.
