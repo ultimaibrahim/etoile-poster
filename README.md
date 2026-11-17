@@ -45,6 +45,12 @@ En la cadena del caso, el gerente veía la calificación de Google y las reseña
 - **Día:** los sábados a las 21 h, 1 de cada 3 reseñas es queja (27 de 82). Es una sola celda del mapa de calor y la muestra es pequeña; las celdas con menos de 25 reseñas se dejan vacías.
 - **Frescura:** las reseñas nuevas llegan en una mediana de unas 3 horas. Antes, cada 15 días.
 
+## Limpieza de datos y aprendizaje automático
+En [`analitica/`](analitica/) están los scripts de Python que limpian las reseñas y aplican ML sobre ellas:
+- **Limpieza** ([`01_limpieza.py`](analitica/01_limpieza.py)): validación, hora local, normalización de texto, idioma, duplicados, anonimización. Embudo en [`reporte_limpieza.md`](analitica/resultados/reporte_limpieza.md).
+- **Clasificador supervisado** ([`02_modelo.py`](analitica/02_modelo.py)): ¿la reseña es negativa (1–2★) por su texto? TF-IDF con Naive Bayes y regresión logística (F1 ≈ 0.91) contra las reglas de palabras de étoile (F1 ≈ 0.76). Ver [`reporte_modelo.md`](analitica/resultados/reporte_modelo.md).
+- **Agrupamiento** ([`03_clusters.py`](analitica/03_clusters.py)): K-means sobre el perfil de las sucursales (exploratorio). Ver [`reporte_clusters.md`](analitica/resultados/reporte_clusters.md).
+
 ## Lo que sabemos y lo que no
 - Un número no alcanza: Google y los consumidores miran cantidad, recencia y respuesta (evidencia de EE. UU.).
 - étoile separa las quejas y muestra cuándo se concentran.
